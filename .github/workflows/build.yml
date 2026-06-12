@@ -1,0 +1,45 @@
+name: QMK Build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'FIRMWARE/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'FIRMWARE/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Set up QMK
+        run: |
+          python3 -m pip install qmk
+          qmk setup -y dunderjester/KLOR
+      
+      - name: Build Default Layout
+        run: qmk compile -kb electronlab/klor -km default -c
+      
+      - name: Build VIAL Layout
+        run: make clean && make electronlab/klor:vial
+        working-directory: ./FIRMWARE/qmk_rp2040
+      
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware-builds
+          path: |
+            **/*.uf2
+            **/*.bin
+          if-no-files-found: ignore
