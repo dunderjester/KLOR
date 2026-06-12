@@ -25,7 +25,7 @@ jobs:
       - name: Set up QMK
         run: |
           python3 -m pip install qmk
-          qmk setup -y dunderjester/KLOR
+          qmk setup -y -b develop
       
       - name: Build Default Layout
         run: qmk compile -kb electronlab/klor -km default -c
