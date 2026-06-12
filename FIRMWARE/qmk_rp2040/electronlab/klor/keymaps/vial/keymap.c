@@ -74,13 +74,13 @@ enum custom_keycodes {
 // │ d e f i n e   s o u n d s                                 │
 // └───────────────────────────────────────────────────────────┘
 
-#ifdef AUDIO_ENABLE
-  #define WINXP_SOUND W__NOTE(_DS6), Q__NOTE(_DS5), H__NOTE(_AS5), H__NOTE(_GS5), H__NOTE(_DS5), H__NOTE(_DS6), H__NOTE(_AS5)
-  #define MAC_SOUND S__NOTE(_CS5), B__NOTE(_C5)
+// #ifdef AUDIO_ENABLE
+//   #define WINXP_SOUND W__NOTE(_DS6), Q__NOTE(_DS5), H__NOTE(_AS5), H__NOTE(_GS5), H__NOTE(_DS5), H__NOTE(_DS6), H__NOTE(_AS5)
+//   #define MAC_SOUND S__NOTE(_CS5), B__NOTE(_C5)
  
-  float winxp_song[][2] = SONG(WINXP_SOUND);
-  float mac_song[][2] = SONG(MAC_SOUND);
-#endif // AUDIO_ENABLE
+//   float winxp_song[][2] = SONG(WINXP_SOUND);
+//   float mac_song[][2] = SONG(MAC_SOUND);
+// #endif // AUDIO_ENABLE
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 // │ K E Y M A P S                                                                                                                              │
@@ -288,24 +288,24 @@ LSFT_T(KC_TAB),  KC_A,    KC_S,    KC_D,   LSFT_T(KC_F),KC_G,                   
 // ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
 
 
-bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    for (uint8_t i = led_min; i < led_max; i++) {
-        switch(get_highest_layer(layer_state|default_layer_state)) {
-            case 3:
-                rgb_matrix_set_color(i, 80, 0, 0);
-                break;
-            case 2:
-                rgb_matrix_set_color(i, 0, 80, 0);
-                break;
-            case 1:
-                rgb_matrix_set_color(i, 0, 0, 80);
-                break;
-            default:
-                break;
-        }
-    }
-    return false;
-}
+// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+//     for (uint8_t i = led_min; i < led_max; i++) {
+//         switch(get_highest_layer(layer_state|default_layer_state)) {
+//             case 3:
+//                 rgb_matrix_set_color(i, 80, 0, 0);
+//                 break;
+//             case 2:
+//                 rgb_matrix_set_color(i, 0, 80, 0);
+//                 break;
+//             case 1:
+//                 rgb_matrix_set_color(i, 0, 0, 80);
+//                 break;
+//             default:
+//                 break;
+//         }
+//     }
+//     return false;
+// }
 
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -449,32 +449,32 @@ void render_os_lock_status(void) {
 
 // hardware feature status ──────────────────────────────┐
 
-    oled_write_P(sep_h2, false);
+//     oled_write_P(sep_h2, false);
 
-    #ifndef AUDIO_ENABLE 
-        oled_write_P(b_lock, false);
-    #endif
-    #ifndef HAPTIC_ENABLE 
-        oled_write_P(b_lock, false);
-    #endif
+//     #ifndef AUDIO_ENABLE 
+//         oled_write_P(b_lock, false);
+//     #endif
+//     #ifndef HAPTIC_ENABLE 
+//         oled_write_P(b_lock, false);
+//     #endif
 
-    #ifdef AUDIO_ENABLE // ────────────────── AUDIO
-        if (is_audio_on()) { 
-            oled_write_P(aud_en, false); 
-        } else {
-            oled_write_P(aud_di, false);
-        }
-    #endif // AUDIO ENABLE
+//     #ifdef AUDIO_ENABLE // ────────────────── AUDIO
+//         if (is_audio_on()) { 
+//             oled_write_P(aud_en, false); 
+//         } else {
+//             oled_write_P(aud_di, false);
+//         }
+//     #endif // AUDIO ENABLE
 
-     #ifdef HAPTIC_ENABLE // ─────────────── HAPTIC
-//        oled_write_P(hap_en, false);
-        if (haptic_get_enable()) { 
-            oled_write_P(hap_en, false);
-        } else {
-            oled_write_P(hap_di, false);
-        }
+//      #ifdef HAPTIC_ENABLE // ─────────────── HAPTIC
+// //        oled_write_P(hap_en, false);
+//         if (haptic_get_enable()) { 
+//             oled_write_P(hap_en, false);
+//         } else {
+//             oled_write_P(hap_di, false);
+//         }
 
-     #endif // HAPTIC ENABLE
+//      #endif // HAPTIC ENABLE
 }
 
 
