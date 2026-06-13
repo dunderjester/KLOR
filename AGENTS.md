@@ -32,12 +32,12 @@ Location: `FIRMWARE/zmk/`
 QMK (requires `qmk` CLI):
 ```bash
 # Default keymap — produces separate left/right files
-qmk compile -kb electronlab/klor -km default -c -t uf2-split-left
-qmk compile -kb electronlab/klor -km default -t uf2-split-right
+qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
+qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
 
 # Vial keymap — produces separate left/right files (requires vial-qmk fork)
-qmk compile -kb electronlab/klor -km vial -c -t uf2-split-left
-qmk compile -kb electronlab/klor -km vial -t uf2-split-right
+qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
+qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
 ```
 
 Flashing (split keyboard, flash each side separately):
