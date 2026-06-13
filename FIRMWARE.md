@@ -22,7 +22,7 @@ For extra convienence if you intend to modify your firmware for a smaller layout
    
       or "vial" layout using [vial-qmk toolchain](https://github.com/vial-kb/vial-qmk) and the command :
 
-            make clean && make electronlab/klor:vial
+            qmk compile -kb electronlab/klor -km vial -c
     
 -   Also be aware that I have now enabled firmware based handedness definition ([#define EE_HANDS setting](https://docs.qmk.fm/features/split_keyboard)) so you should flash the firmware using the following commands for left and right keyboard sides :
 -   

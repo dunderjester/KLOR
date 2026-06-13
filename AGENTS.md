@@ -1,17 +1,11 @@
 # AGENTS.md — KLOR Keyboard Repo
 
 ## What this repo is
-Hardware (KiCad PCBs, cases, docs) + firmware (QMK/Vial, ZMK) for the KLOR split keyboard.
-The main deliverables are PCB Gerbers and compiled firmware `.uf2` files.
+Firmware (QMK/Vial, ZMK) for the KLOR split keyboard.
+The main deliverables are compiled firmware `.uf2` files.
 
 ## Repo layout
 ```
-PCB/              KiCad files, Gerbers, and fabrication notes
-  klor1_4/          Main rev 1.4 (full height Cherry MX)
-  klor1_4_LP_KS33/  Low profile Gateron KS33 (beta)
-case/             3D printed and acrylic cases, switchplates
-knob/             Encoder knob STLs
-docs/             Build guides and images
 FIRMWARE/         All firmware sources
   qmk_rp2040/       QMK for RP2040 (wired, Vial-compatible)
   zmk/              ZMK for Nice!Nano V2 (wireless BLE)
@@ -41,9 +35,7 @@ QMK (requires `qmk` CLI):
 qmk compile -kb electronlab/klor -km default -c
 
 # Vial keymap (requires vial-qmk fork)
-make clean && make electronlab/klor:vial
-# OR from repo root:
-make -C FIRMWARE/qmk_rp2040 clean && make -C FIRMWARE/qmk_rp2040 electronlab/klor:vial
+qmk compile -kb electronlab/klor -km vial -c
 ```
 
 Flashing (split keyboard, flash each side separately):
@@ -84,5 +76,3 @@ Before committing firmware changes:
 
 ## References
 - `FIRMWARE.md` — detailed flash commands and serial config options
-- `FABNOTES.md` — PCB fabrication notes, part selection, assembly tips
-- `CHANGELOG.md` — revision history
