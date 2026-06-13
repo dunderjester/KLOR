@@ -23,17 +23,28 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Set up QMK
+      - name: Set up VIAL-QMK
         run: |
           python3 -m pip install qmk
-          qmk setup -y -b develop
+          qmk setup -y -b vial vial-kb/vial-qmk
+      
+      - name: Copy keyboard into QMK tree
+        run: |
+          mkdir -p ~/qmk_firmware/keyboards/electronlab
+          cp -r ./FIRMWARE/qmk_rp2040/electronlab/klor ~/qmk_firmware/keyboards/electronlab/
       
       - name: Build Default Layout
         run: qmk compile -kb electronlab/klor -km default -c
       
       - name: Build VIAL Layout
-        run: make clean && make electronlab/klor:vial
-        working-directory: ./FIRMWARE/qmk_rp2040
+        run: qmk compile -kb electronlab/klor -km vial -c
+      
+      - name: Copy firmware artifacts to workspace
+        if: always()
+        run: |
+          mkdir -p firmware-output
+          cp ~/qmk_firmware/*.uf2 firmware-output/ 2>/dev/null || true
+          cp ~/qmk_firmware/*.bin firmware-output/ 2>/dev/null || true
       
       - name: Upload Artifacts
         if: always()
@@ -41,6 +52,6 @@ jobs:
         with:
           name: firmware-builds
           path: |
-            **/*.uf2
-            **/*.bin
+            firmware-output/*.uf2
+            firmware-output/*.bin
           if-no-files-found: ignore

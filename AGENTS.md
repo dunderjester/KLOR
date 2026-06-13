@@ -58,7 +58,7 @@ qmk flash -kb electronlab/klor -km default -c -bl uf2-split-right
 ## CI
 - GitHub Actions: `.github/workflows/build.yml`
 - Triggered only on changes to `FIRMWARE/**`
-- Uses `qmk setup -y -b develop` (the QMK repo default branch is `develop`, not `master`)
+- Uses `qmk setup -y -b vial vial-kb/vial-qmk` (the VIAL-QMK fork is required for the Vial keymap)
 
 ## Architecture notes
 - **Split keyboard**: 8 rows × 6 cols matrix. Left half = rows 0-3, right half = rows 4-7.
