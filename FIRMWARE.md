@@ -16,13 +16,15 @@ For extra convienence if you intend to modify your firmware for a smaller layout
 
 -  Added support for VIAL firmware for RP2040 boards. You can now compile :
    
-      the "default" layout using [QMK toolchain](https://github.com/qmk/qmk_firmware) and the command :
+      the "default" layout using [QMK toolchain](https://github.com/qmk/qmk_firmware) and the commands :
 
-            qmk compile -kb electronlab/klor -km default -c
+            qmk compile -kb electronlab/klor -km default -c -t uf2-split-left
+            qmk compile -kb electronlab/klor -km default -t uf2-split-right
    
-      or "vial" layout using [vial-qmk toolchain](https://github.com/vial-kb/vial-qmk) and the command :
+      or "vial" layout using [vial-qmk toolchain](https://github.com/vial-kb/vial-qmk) and the commands :
 
-            qmk compile -kb electronlab/klor -km vial -c
+            qmk compile -kb electronlab/klor -km vial -c -t uf2-split-left
+            qmk compile -kb electronlab/klor -km vial -t uf2-split-right
     
 -   Also be aware that I have now enabled firmware based handedness definition ([#define EE_HANDS setting](https://docs.qmk.fm/features/split_keyboard)) so you should flash the firmware using the following commands for left and right keyboard sides :
 -   

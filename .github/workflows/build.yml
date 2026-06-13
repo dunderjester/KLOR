@@ -33,18 +33,24 @@ jobs:
           mkdir -p ~/qmk_firmware/keyboards/electronlab
           cp -r ./FIRMWARE/qmk_rp2040/electronlab/klor ~/qmk_firmware/keyboards/electronlab/
       
-      - name: Build Default Layout
-        run: qmk compile -kb electronlab/klor -km default -c
+      - name: Build Default Left
+        run: qmk compile -kb electronlab/klor -km default -c -t uf2-split-left
       
-      - name: Build VIAL Layout
-        run: qmk compile -kb electronlab/klor -km vial -c
+      - name: Build Default Right
+        run: qmk compile -kb electronlab/klor -km default -t uf2-split-right
+      
+      - name: Build VIAL Left
+        run: qmk compile -kb electronlab/klor -km vial -c -t uf2-split-left
+      
+      - name: Build VIAL Right
+        run: qmk compile -kb electronlab/klor -km vial -t uf2-split-right
       
       - name: Copy firmware artifacts to workspace
         if: always()
         run: |
           mkdir -p firmware-output
-          cp ~/qmk_firmware/*.uf2 firmware-output/ 2>/dev/null || true
-          cp ~/qmk_firmware/*.bin firmware-output/ 2>/dev/null || true
+          find ~/qmk_firmware -name "*.uf2" -exec cp {} firmware-output/ \; 2>/dev/null || true
+          find ~/qmk_firmware -name "*.bin" -exec cp {} firmware-output/ \; 2>/dev/null || true
       
       - name: Upload Artifacts
         if: always()

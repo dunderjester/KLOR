@@ -31,11 +31,13 @@ Location: `FIRMWARE/zmk/`
 ## Build commands
 QMK (requires `qmk` CLI):
 ```bash
-# Default keymap
-qmk compile -kb electronlab/klor -km default -c
+# Default keymap — produces separate left/right files
+qmk compile -kb electronlab/klor -km default -c -t uf2-split-left
+qmk compile -kb electronlab/klor -km default -t uf2-split-right
 
-# Vial keymap (requires vial-qmk fork)
-qmk compile -kb electronlab/klor -km vial -c
+# Vial keymap — produces separate left/right files (requires vial-qmk fork)
+qmk compile -kb electronlab/klor -km vial -c -t uf2-split-left
+qmk compile -kb electronlab/klor -km vial -t uf2-split-right
 ```
 
 Flashing (split keyboard, flash each side separately):
