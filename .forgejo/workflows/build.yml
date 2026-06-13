@@ -1,0 +1,64 @@
+name: QMK Build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'FIRMWARE/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'FIRMWARE/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up VIAL-QMK
+        run: |
+          python3 -m pip install qmk
+          qmk setup -y -b vial vial-kb/vial-qmk
+
+      - name: Copy keyboard into QMK tree
+        run: |
+          mkdir -p ~/qmk_firmware/keyboards/electronlab
+          cp -r ./FIRMWARE/qmk_rp2040/electronlab/klor ~/qmk_firmware/keyboards/electronlab/
+
+      - name: Build Default Left
+        run: |
+          qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
+          mkdir -p firmware-output
+          cp ~/qmk_firmware/electronlab_klor_default.uf2 firmware-output/klor_default_left.uf2 || true
+
+      - name: Build Default Right
+        run: |
+          qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
+          cp ~/qmk_firmware/electronlab_klor_default.uf2 firmware-output/klor_default_right.uf2 || true
+
+      - name: Build VIAL Left
+        run: |
+          qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
+          cp ~/qmk_firmware/electronlab_klor_vial.uf2 firmware-output/klor_vial_left.uf2 || true
+
+      - name: Build VIAL Right
+        run: |
+          qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
+          cp ~/qmk_firmware/electronlab_klor_vial.uf2 firmware-output/klor_vial_right.uf2 || true
+
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-builds
+          path: |
+            firmware-output/*.uf2
+          if-no-files-found: ignore

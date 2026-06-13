@@ -50,9 +50,10 @@ qmk flash -kb electronlab/klor -km default -c -bl uf2-split-right
 ```
 
 ## CI
-- GitHub Actions: `.github/workflows/build.yml`
-- Triggered only on changes to `FIRMWARE/**`
-- Uses `qmk setup -y -b vial vial-kb/vial-qmk` (the VIAL-QMK fork is required for the Vial keymap)
+- **Codeberg (Forgejo Actions)**: `.forgejo/workflows/build.yml` — primary CI
+- **GitHub Actions (legacy)**: `.github/workflows/build.yml` — kept for GitHub mirror
+- Triggered on changes to `FIRMWARE/**`
+- Uses `qmk setup -y -b vial vial-kb/vial-qmk` (VIAL-QMK fork required for Vial keymap)
 
 ## Architecture notes
 - **Split keyboard**: 8 rows × 6 cols matrix. Left half = rows 0-3, right half = rows 4-7.
