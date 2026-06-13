@@ -61,18 +61,6 @@ enum klor_layers {
 #define GUI_O MT(MOD_LGUI, KC_O)
 
 
-// ┌───────────────────────────────────────────────────────────┐
-// │ d e f i n e   s o u n d s                                 │
-// └───────────────────────────────────────────────────────────┘
-
-// #ifdef AUDIO_ENABLE
-//   #define WINXP_SOUND W__NOTE(_DS6), Q__NOTE(_DS5), H__NOTE(_AS5), H__NOTE(_GS5), H__NOTE(_DS5), H__NOTE(_DS6), H__NOTE(_AS5)
-//   #define MAC_SOUND S__NOTE(_CS5), B__NOTE(_C5)
- 
-//   float winxp_song[][2] = SONG(WINXP_SOUND);
-//   float mac_song[][2] = SONG(MAC_SOUND);
-// #endif // AUDIO_ENABLE
-
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 // │ K E Y M A P S                                                                                                                              │
 // └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
@@ -110,6 +98,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
+// ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+// │ T A P P I N G   T E R M                                                                                                                    │
+// └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case CTL_S:
+        case SHT_T:
+        case SHT_N:
+        case CTL_E:
+        case LSFT_T(KC_F):
+        case RSFT_T(KC_J):
+            return 250;
+        case GUI_A:
+        case ALT_R:
+        case ALT_I:
+        case GUI_O:
+        case LSFT_T(KC_TAB):
+            return 200;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
+
 
 
 
@@ -119,24 +132,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
 
 
-// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-//     for (uint8_t i = led_min; i < led_max; i++) {
-//         switch(get_highest_layer(layer_state|default_layer_state)) {
-//             case 3:
-//                 rgb_matrix_set_color(i, 80, 0, 0);
-//                 break;
-//             case 2:
-//                 rgb_matrix_set_color(i, 0, 80, 0);
-//                 break;
-//             case 1:
-//                 rgb_matrix_set_color(i, 0, 0, 80);
-//                 break;
-//             default:
-//                 break;
-//         }
-//     }
-//     return false;
-// }
 
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -278,34 +273,14 @@ void render_os_lock_status(void) {
         oled_write_P(b_lock, false);
     }
 
-// hardware feature status ──────────────────────────────┐
+// modifier status ─────────────────────────────────────┐
 
-//     oled_write_P(sep_h2, false);
-
-//     #ifndef AUDIO_ENABLE 
-//         oled_write_P(b_lock, false);
-//     #endif
-//     #ifndef HAPTIC_ENABLE 
-//         oled_write_P(b_lock, false);
-//     #endif
-
-//     #ifdef AUDIO_ENABLE // ────────────────── AUDIO
-//         if (is_audio_on()) { 
-//             oled_write_P(aud_en, false); 
-//         } else {
-//             oled_write_P(aud_di, false);
-//         }
-//     #endif // AUDIO ENABLE
-
-//      #ifdef HAPTIC_ENABLE // ─────────────── HAPTIC
-// //        oled_write_P(hap_en, false);
-//         if (haptic_get_enable()) { 
-//             oled_write_P(hap_en, false);
-//         } else {
-//             oled_write_P(hap_di, false);
-//         }
-
-//      #endif // HAPTIC ENABLE
+    oled_write_P(sep_h2, false);
+    uint8_t mods = get_mods();
+    oled_write_P(mods & MOD_MASK_SHIFT ? PSTR("S") : PSTR("-"), false);
+    oled_write_P(mods & MOD_MASK_CTRL ? PSTR("C") : PSTR("-"), false);
+    oled_write_P(mods & MOD_MASK_ALT  ? PSTR("A") : PSTR("-"), false);
+    oled_write_ln_P(mods & MOD_MASK_GUI  ? PSTR("G") : PSTR("-"), false);
 }
 
 
@@ -314,7 +289,7 @@ void render_os_lock_status(void) {
 int layerstate = 0;
 
 layer_state_t layer_state_set_kb(layer_state_t state) {
-      switch (get_highest_layer(layer_state | default_layer_state)) {
+      switch (get_highest_layer(state | default_layer_state)) {
             case 0:
                 strcpy ( layer_state_str, "BASE");
                 break;
@@ -432,35 +407,3 @@ bool oled_task_kb(void) {
     return false;
 }
 #endif // OLED_ENABLE
-
-
-
-
-// ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-// │ E N C O D E R                                                                                                                              │
-// └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-// ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
-
-
-/*
-
-                                                       ▐█    ▟▛ ▐█     ▄▆▀▀▀▀▀▀▆▄  ▐█▀▀▀▀▀█▌
-                                                       ▐█   ▟▛  ▐█    ▟▛        ▜▙ ▐█     █▌
-                                                       ▐█  ▟▛   ▐█   ▐█          █▋▐█     █▌
-                                                       ▐█ ▟█▙   ▐█   ▐█          █▋▐█▀▀▜█▀▀▘
-                                                       ▐█▟▛ ▜▙  ▐█    ▜▙        ▟▛ ▐█   ▜▙
-                                                       ▐█▛   ▜▙ ▐█▄▄▄▄ ▀▜▆▄▄▄▄▆▛▀  ▐█    ▜▙
-
-                                                                 ▄██████████████▄
-                                                                 ████████████████
-                                                            ▄██████▀  ▀████▀  ▀██████▄
-                                                            ███████▄  ▄████▄  ▄███████
-                                                            ███████████▀▀▀▀███████████
-                                                            ▀█████████▀ ▄▄ ▀█████████▀
-                                                                 ████▀ ▄██▄ ▀████
-                                                                 ████▄▄████▄▄████
-
-*/
-
-
-
