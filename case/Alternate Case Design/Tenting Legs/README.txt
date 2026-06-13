@@ -1,1 +1,0 @@
-Tenting legs by chewiedies on Thingiverse: https://www.thingiverse.com/thing:5382293
