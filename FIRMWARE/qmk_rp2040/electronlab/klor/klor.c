@@ -18,9 +18,11 @@
 #include "klor.h"
 
 
+#ifdef OLED_ENABLE
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
     return OLED_ROTATION_180;
 }
+#endif
 
 #ifdef SWAP_HANDS_ENABLE
 
