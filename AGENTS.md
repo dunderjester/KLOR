@@ -32,12 +32,12 @@ Location: `FIRMWARE/zmk/`
 QMK (requires `qmk` CLI):
 ```bash
 # Default keymap — produces separate left/right files
-qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
-qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
+qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
+qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
 
 # Vial keymap — produces separate left/right files (requires vial-qmk fork)
-qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
-qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
+qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
+qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
 ```
 
 Flashing (split keyboard, flash each side separately):
@@ -60,6 +60,9 @@ qmk flash -kb electronlab/klor -km default -c -bl uf2-split-right
 - **Encoders**: Two encoders (left on GP28/GP29, right with swapped pins). Defined in `keyboard.json`.
 - **OLED**: 128x64 SSD1306, rotated 180°. `SPLIT_OLED_ENABLE` syncs OLED state across halves.
 - **Features currently disabled in this fork**: RGB matrix, audio, haptics. The hardware supports them but they are stripped from the firmware to reduce size and complexity. Do not re-enable without checking RP2040 flash/RAM constraints.
+
+## Build system quirks
+- **Never use `-e OPT_DEFS+=...`** in `qmk compile`. GNU Make treats command-line variables as overrides: subsequent `OPT_DEFS += ...` in the makefile (e.g. `-DKEYMAP_C=...`) is silently ignored. Use `-e EXTRAFLAGS=-D...` instead — it goes directly into `ALL_CFLAGS` via `$(EXTRAFLAGS)` and doesn't clobber other variable assignments.
 
 ## Important constraints
 - **Do not use `WS2812_DRIVER` or `AUDIO_DRIVER` in `rules.mk`** — these features are disabled globally.

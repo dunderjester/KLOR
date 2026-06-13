@@ -18,13 +18,13 @@ For extra convienence if you intend to modify your firmware for a smaller layout
    
       the "default" layout using [QMK toolchain](https://github.com/qmk/qmk_firmware) and the commands :
 
-            qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
-            qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
-   
+            qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
+            qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
+    
       or "vial" layout using [vial-qmk toolchain](https://github.com/vial-kb/vial-qmk) and the commands :
 
-            qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
-            qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
+            qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
+            qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
     
 -   Also be aware that I have now enabled firmware based handedness definition ([#define EE_HANDS setting](https://docs.qmk.fm/features/split_keyboard)) so you should flash the firmware using the following commands for left and right keyboard sides :
 -   

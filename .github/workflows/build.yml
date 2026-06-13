@@ -35,23 +35,23 @@ jobs:
       
       - name: Build Default Left
         run: |
-          qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
+          qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
           mkdir -p firmware-output
           cp ~/qmk_firmware/electronlab_klor_default.uf2 firmware-output/klor_default_left.uf2 || true
       
       - name: Build Default Right
         run: |
-          qmk compile -kb electronlab/klor -km default -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
+          qmk compile -kb electronlab/klor -km default -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
           cp ~/qmk_firmware/electronlab_klor_default.uf2 firmware-output/klor_default_right.uf2 || true
       
       - name: Build VIAL Left
         run: |
-          qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_LEFT
+          qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_LEFT
           cp ~/qmk_firmware/electronlab_klor_vial.uf2 firmware-output/klor_vial_left.uf2 || true
       
       - name: Build VIAL Right
         run: |
-          qmk compile -kb electronlab/klor -km vial -c -e OPT_DEFS+=-DINIT_EE_HANDS_RIGHT
+          qmk compile -kb electronlab/klor -km vial -c -e EXTRAFLAGS=-DINIT_EE_HANDS_RIGHT
           cp ~/qmk_firmware/electronlab_klor_vial.uf2 firmware-output/klor_vial_right.uf2 || true
       
       - name: Upload Artifacts
